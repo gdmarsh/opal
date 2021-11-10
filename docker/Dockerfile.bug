@@ -1,0 +1,9 @@
+FROM python:3.8-alpine3.11
+RUN apk update
+# TODO: remove this when upgrading to a new alpine version
+# more details: https://github.com/pyca/cryptography/issues/5771
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+# install linux libraries necessary to compile some python packages
+RUN apk add --update --no-cache --virtual .build-deps gcc git build-base alpine-sdk python3-dev musl-dev postgresql-dev libffi-dev libressl-dev
+RUN pip install opal-server==0.1.17
+CMD ["opal-server", "run"]
